@@ -21,27 +21,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.psm.myfilms.Movie
 import com.psm.myfilms.R
-import com.psm.myfilms.movies
 import com.psm.myfilms.ui.screens.Screen
-import com.psm.myfilms.ui.theme.MyFilmsTheme
+
+const val DETAIL_SCREEN_ROUTE = "detail"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen() {
+fun DetailScreen(movie: Movie, onBackClicked: () -> Unit) {
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-        val movie = movies[0]
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
                     title = { Text(movie.title) },
                     navigationIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = onBackClicked) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
                                 contentDescription = stringResource(id = R.string.back),
@@ -73,13 +72,5 @@ fun DetailScreen() {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ComposablePreview() {
-    MyFilmsTheme {
-        DetailScreen()
     }
 }

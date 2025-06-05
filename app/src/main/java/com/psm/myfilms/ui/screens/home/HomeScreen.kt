@@ -1,5 +1,6 @@
 package com.psm.myfilms.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,17 +21,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.psm.myfilms.Movie
 import com.psm.myfilms.movies
 import com.psm.myfilms.ui.screens.Screen
-import com.psm.myfilms.ui.theme.MyFilmsTheme
+
+const val HOME_SCREEN_ROUTE = "home"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onMovieClicked: (Movie) -> Unit) {
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
@@ -42,13 +43,16 @@ fun HomeScreen() {
                 )
             },
         ) { innerPadding ->
-            MyMoviesList(innerPadding)
+            MyMoviesList(innerPadding, onMovieClicked)
         }
     }
 }
 
 @Composable
-fun MyMoviesList(scaffoldPadding: PaddingValues = PaddingValues(0.dp)) {
+fun MyMoviesList(
+    scaffoldPadding: PaddingValues = PaddingValues(0.dp),
+    onMovieClicked: (Movie) -> Unit
+) {
     LazyVerticalGrid(
         modifier = Modifier.padding(horizontal = 16.dp),
         contentPadding = scaffoldPadding,
@@ -57,14 +61,14 @@ fun MyMoviesList(scaffoldPadding: PaddingValues = PaddingValues(0.dp)) {
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(movies) {
-            MovieItem(it)
+            MovieItem(movie = it, onClick = { onMovieClicked(it) })
         }
     }
 }
 
 @Composable
-fun MovieItem(movie: Movie) {
-    Column {
+fun MovieItem(movie: Movie, onClick: () -> Unit) {
+    Column(modifier = Modifier.clickable(onClick = onClick)) {
         AsyncImage(
             model = movie.imageUrl,
             contentDescription = movie.title,
@@ -81,14 +85,5 @@ fun MovieItem(movie: Movie) {
                 .padding(4.dp)
                 .align(Alignment.CenterHorizontally),
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ComposablePreview() {
-    MyFilmsTheme {
-//       MovieItem(movies[0])
-        MyMoviesList()
     }
 }
