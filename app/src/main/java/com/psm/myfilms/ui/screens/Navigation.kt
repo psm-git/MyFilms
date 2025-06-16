@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.psm.myfilms.movies
+import com.psm.myfilms.data.MoviesRepository
 import com.psm.myfilms.ui.screens.detail.DETAIL_SCREEN_ROUTE
 import com.psm.myfilms.ui.screens.detail.DetailScreen
 import com.psm.myfilms.ui.screens.home.HOME_SCREEN_ROUTE
@@ -30,8 +30,10 @@ fun Navigation() {
             arguments = listOf(navArgument("movieId") { type = NavType.IntType })
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movieId")
+
+            // TODO: Temporary gets movies from a dedicated repository function.
             DetailScreen(
-                movie = movies.first { it.id == movieId },
+                movie = MoviesRepository().getMovies().first { it.id == movieId },
                 onBackClicked = { navController.popBackStack() }
             )
         }

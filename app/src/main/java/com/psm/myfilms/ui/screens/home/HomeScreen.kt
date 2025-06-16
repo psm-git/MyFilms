@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.psm.myfilms.Movie
+import com.psm.myfilms.data.Movie
 import com.psm.myfilms.R
 import com.psm.myfilms.ui.common.PermissionRequestEffect
 import com.psm.myfilms.ui.common.getRegion
