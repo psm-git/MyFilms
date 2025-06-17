@@ -23,22 +23,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.psm.myfilms.data.Movie
 import com.psm.myfilms.R
+import com.psm.myfilms.ui.common.Loading
 import com.psm.myfilms.ui.screens.Screen
 
 const val DETAIL_SCREEN_ROUTE = "detail"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(movie: Movie, onBackClicked: () -> Unit) {
+fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
+    val state = viewModel.state
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
-                    title = { Text(movie.title) },
+                    title = { Text(state.movie?.title ?: "") },
                     navigationIcon = {
                         IconButton(onClick = onBackClicked) {
                             Icon(
@@ -51,25 +52,30 @@ fun DetailScreen(movie: Movie, onBackClicked: () -> Unit) {
                 )
             },
         ) { padding ->
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                AsyncImage(
-                    model = movie.imageUrl,
-                    contentDescription = movie.title,
-                    contentScale = ContentScale.Crop,
+            if (state.loading) {
+                Loading(padding = padding)
+            }
+            state.movie?.let {
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16 / 9f)
-                )
+                        .padding(padding)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    AsyncImage(
+                        model = state.movie.imageUrl,
+                        contentDescription = state.movie.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(16 / 9f)
+                    )
 
-                Text(
-                    text = movie.title,
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.headlineMedium
-                )
+                    Text(
+                        text = state.movie.title,
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
             }
         }
     }

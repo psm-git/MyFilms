@@ -1,4 +1,4 @@
-package com.psm.myfilms.ui.screens.home
+package com.psm.myfilms.ui.screens.detail
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,10 +9,10 @@ import com.psm.myfilms.data.Movie
 import com.psm.myfilms.data.MoviesRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class DetailViewModel(private val movieId: Int) : ViewModel() {
     data class UiState(
         val loading: Boolean = false,
-        val movies: List<Movie> = emptyList()
+        val movie: Movie? = null
     )
 
     var state by mutableStateOf(UiState())
@@ -20,10 +20,10 @@ class HomeViewModel : ViewModel() {
 
     private val repository = MoviesRepository()
 
-    fun onUiReady(region: String) {
+    init {
         viewModelScope.launch {
             state = UiState(loading = true)
-            state = UiState(loading = false, movies = repository.fetchPopularMovies(region))
+            state = UiState(loading = false, movie = repository.fetchMovieById(movieId))
         }
     }
 }
