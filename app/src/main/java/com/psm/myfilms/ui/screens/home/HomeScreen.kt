@@ -35,8 +35,6 @@ import com.psm.myfilms.ui.common.getRegion
 import com.psm.myfilms.ui.screens.Screen
 import kotlinx.coroutines.launch
 
-const val HOME_SCREEN_ROUTE = "home"
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(

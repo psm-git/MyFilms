@@ -27,8 +27,6 @@ import com.psm.myfilms.R
 import com.psm.myfilms.ui.common.Loading
 import com.psm.myfilms.ui.screens.Screen
 
-const val DETAIL_SCREEN_ROUTE = "detail"
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
