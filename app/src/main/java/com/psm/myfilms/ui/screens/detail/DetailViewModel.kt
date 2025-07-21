@@ -1,12 +1,11 @@
 package com.psm.myfilms.ui.screens.detail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psm.myfilms.data.Movie
 import com.psm.myfilms.data.MoviesRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val movieId: Int) : ViewModel() {
@@ -15,15 +14,15 @@ class DetailViewModel(private val movieId: Int) : ViewModel() {
         val movie: Movie? = null
     )
 
-    var state by mutableStateOf(UiState())
-        private set
+    private val _state = MutableStateFlow(UiState())
+    val state get() = _state.asStateFlow()
 
     private val repository = MoviesRepository()
 
     init {
         viewModelScope.launch {
-            state = UiState(loading = true)
-            state = UiState(loading = false, movie = repository.fetchMovieById(movieId))
+            _state.value = UiState(loading = true)
+            _state.value = UiState(loading = false, movie = repository.fetchMovieById(movieId))
         }
     }
 }

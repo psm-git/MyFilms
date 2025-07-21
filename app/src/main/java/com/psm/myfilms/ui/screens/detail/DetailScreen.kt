@@ -17,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -32,7 +34,7 @@ const val DETAIL_SCREEN_ROUTE = "detail"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
-    val state = viewModel.state
+    val state by viewModel.state.collectAsState()
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
@@ -62,8 +64,8 @@ fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
                         .verticalScroll(rememberScrollState())
                 ) {
                     AsyncImage(
-                        model = state.movie.imageUrl,
-                        contentDescription = state.movie.title,
+                        model = it.imageUrl,
+                        contentDescription = it.title,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -71,7 +73,7 @@ fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
                     )
 
                     Text(
-                        text = state.movie.title,
+                        text = it.title,
                         modifier = Modifier.padding(16.dp),
                         style = MaterialTheme.typography.headlineMedium
                     )
