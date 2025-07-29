@@ -96,7 +96,7 @@ fun MyMoviesList(
 fun MovieItem(movie: Movie, onClick: () -> Unit) {
     Column(modifier = Modifier.clickable(onClick = onClick)) {
         AsyncImage(
-            model = movie.imageUrl,
+            model = movie.posterPath,
             contentDescription = movie.title,
             modifier = Modifier
                 .fillMaxWidth()
