@@ -39,9 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
 import com.psm.myfilms.ui.common.Loading
@@ -52,18 +49,12 @@ import com.psm.myfilms.ui.screens.Screen
 fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
 
-    LaunchedEffect(viewModel, lifecycle) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.events.collect { event ->
-                when (event) {
-                    is DetailViewModel.UiEvent.ShowMessage -> {
-                        snackbarHostState.currentSnackbarData?.dismiss()
-                        snackbarHostState.showSnackbar(event.message)
-                    }
-                }
-            }
+    LaunchedEffect(state.message) {
+        state.message?.let {
+            snackbarHostState.currentSnackbarData?.dismiss()
+            snackbarHostState.showSnackbar(it)
+            viewModel.onMessageShown()
         }
     }
 
