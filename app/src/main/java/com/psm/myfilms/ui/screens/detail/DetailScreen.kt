@@ -47,7 +47,7 @@ fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
     val detailState = rememberDetailState()
 
     detailState.ShowMessageEffect(message = state.message) {
-        viewModel.onMessageShown()
+        viewModel.onAction(DetailAction.MessageShown)
     }
 
     Screen {
@@ -62,7 +62,7 @@ fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
             },
             snackbarHost = { SnackbarHost(detailState.snackbarHostState) },
             floatingActionButton = {
-                FloatingActionButton(onClick = { viewModel.onFavoriteClicked() }) {
+                FloatingActionButton(onClick = { viewModel.onAction(DetailAction.FavoriteClicked) }) {
                     Icon(
                         imageVector = Icons.Default.FavoriteBorder,
                         contentDescription = stringResource(R.string.mark_as_favourite)
