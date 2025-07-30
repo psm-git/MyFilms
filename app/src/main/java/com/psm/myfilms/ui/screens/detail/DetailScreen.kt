@@ -17,16 +17,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -48,22 +44,23 @@ import com.psm.myfilms.ui.screens.Screen
 @Composable
 fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
     val state by viewModel.state.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val detailState = rememberDetailState()
 
-    LaunchedEffect(state.message) {
-        state.message?.let {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(it)
-            viewModel.onMessageShown()
-        }
+    detailState.ShowMessageEffect(message = state.message) {
+        viewModel.onMessageShown()
     }
 
     Screen {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { DetailTopBar(state.movie?.title ?: "", scrollBehavior, onBackClicked) },
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            modifier = Modifier.nestedScroll(detailState.scrollBehavior.nestedScrollConnection),
+            topBar = {
+                DetailTopBar(
+                    state.movie?.title ?: "",
+                    detailState.scrollBehavior,
+                    onBackClicked
+                )
+            },
+            snackbarHost = { SnackbarHost(detailState.snackbarHostState) },
             floatingActionButton = {
                 FloatingActionButton(onClick = { viewModel.onFavoriteClicked() }) {
                     Icon(

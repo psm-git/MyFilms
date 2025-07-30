@@ -1,6 +1,5 @@
 package com.psm.myfilms.ui.screens.home
 
-import android.Manifest
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,26 +15,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
 import com.psm.myfilms.data.Movie
 import com.psm.myfilms.ui.common.Loading
-import com.psm.myfilms.ui.common.PermissionRequestEffect
-import com.psm.myfilms.ui.common.getRegion
 import com.psm.myfilms.ui.screens.Screen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,25 +37,18 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(),
     onMovieClicked: (Movie) -> Unit
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val state by viewModel.state.collectAsState()
+    val homeState = rememberHomeState()
 
-    PermissionRequestEffect(permission = Manifest.permission.ACCESS_COARSE_LOCATION) { granted ->
-        coroutineScope.launch {
-            val region = if (granted) context.getRegion() else "US"
-            viewModel.onUiReady(region)
-        }
-    }
+    homeState.AskRegionEffect { viewModel.onUiReady(it) }
 
     Screen {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier.nestedScroll(homeState.scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
-                    title = { Text(text = context.getString(R.string.app_name)) },
-                    scrollBehavior = scrollBehavior
+                    title = { Text(text = stringResource(R.string.app_name)) },
+                    scrollBehavior = homeState.scrollBehavior
                 )
             },
         ) { innerPadding ->
