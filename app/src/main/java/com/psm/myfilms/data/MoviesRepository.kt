@@ -1,9 +1,11 @@
 package com.psm.myfilms.data
 
-class MoviesRepository {
-    suspend fun fetchPopularMovies(region: String): List<Movie> =
+class MoviesRepository(
+    private val regionRepository: RegionRepository
+) {
+    suspend fun fetchPopularMovies(): List<Movie> =
         MoviesClient.instance
-            .fetchPopularMovies(region)
+            .fetchPopularMovies(regionRepository.findLastRegion())
             .results
             .map { it.toDomainModel() }
 

@@ -15,7 +15,10 @@ sealed interface DetailAction {
     data object MessageShown : DetailAction
 }
 
-class DetailViewModel(private val movieId: Int) : ViewModel() {
+class DetailViewModel(
+    private val repository: MoviesRepository,
+    private val movieId: Int
+) : ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
@@ -25,8 +28,6 @@ class DetailViewModel(private val movieId: Int) : ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> get() = _state.asStateFlow()
-
-    private val repository = MoviesRepository()
 
     init {
         viewModelScope.launch {

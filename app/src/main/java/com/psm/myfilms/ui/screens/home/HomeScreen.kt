@@ -1,5 +1,6 @@
 package com.psm.myfilms.ui.screens.home
 
+import android.Manifest
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,23 +25,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
 import com.psm.myfilms.data.Movie
 import com.psm.myfilms.ui.common.Loading
+import com.psm.myfilms.ui.common.PermissionRequestEffect
 import com.psm.myfilms.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel(),
+    viewModel: HomeViewModel,
     onMovieClicked: (Movie) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val homeState = rememberHomeState()
 
-    homeState.AskRegionEffect { viewModel.onUiReady(it) }
+    PermissionRequestEffect(Manifest.permission.ACCESS_COARSE_LOCATION) {
+        viewModel.onUiReady()
+    }
 
     Screen {
         Scaffold(
