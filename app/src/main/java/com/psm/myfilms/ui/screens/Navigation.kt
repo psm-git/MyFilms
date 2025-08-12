@@ -1,6 +1,5 @@
 package com.psm.myfilms.ui.screens
 
-import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -8,9 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.psm.myfilms.App
 import com.psm.myfilms.data.MoviesRepository
 import com.psm.myfilms.data.RegionRepository
 import com.psm.myfilms.data.data_sources.LocationDataSource
+import com.psm.myfilms.data.data_sources.MoviesLocalDataSource
 import com.psm.myfilms.data.data_sources.RegionDataSource
 import com.psm.myfilms.data.data_sources.remote.MoviesRemoteDataSource
 import com.psm.myfilms.ui.screens.detail.DetailScreen
@@ -30,10 +31,11 @@ object NavScreen {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    val app = LocalContext.current.applicationContext as Application
+    val app = LocalContext.current.applicationContext as App
     val moviesRepository = MoviesRepository(
         RegionRepository(RegionDataSource(app, LocationDataSource(app))),
-        MoviesRemoteDataSource()
+        MoviesRemoteDataSource(),
+        MoviesLocalDataSource(app.db.moviesDao())
     )
 
     NavHost(
