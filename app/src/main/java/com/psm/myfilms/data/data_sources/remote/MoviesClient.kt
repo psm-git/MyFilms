@@ -1,4 +1,4 @@
-package com.psm.myfilms.data
+package com.psm.myfilms.data.data_sources.remote
 
 import com.psm.myfilms.BuildConfig
 import kotlinx.serialization.json.Json

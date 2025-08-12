@@ -1,8 +1,6 @@
-package com.psm.myfilms.data.data_sources
+package com.psm.myfilms.data.data_sources.remote
 
 import com.psm.myfilms.data.Movie
-import com.psm.myfilms.data.MoviesClient
-import com.psm.myfilms.data.RemoteMovie
 
 class MoviesRemoteDataSource() {
 

@@ -1,4 +1,4 @@
-package com.psm.myfilms.data
+package com.psm.myfilms.data.data_sources.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

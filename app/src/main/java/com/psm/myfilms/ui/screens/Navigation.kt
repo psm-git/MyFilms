@@ -11,8 +11,8 @@ import androidx.navigation.toRoute
 import com.psm.myfilms.data.MoviesRepository
 import com.psm.myfilms.data.RegionRepository
 import com.psm.myfilms.data.data_sources.LocationDataSource
-import com.psm.myfilms.data.data_sources.MoviesRemoteDataSource
 import com.psm.myfilms.data.data_sources.RegionDataSource
+import com.psm.myfilms.data.data_sources.remote.MoviesRemoteDataSource
 import com.psm.myfilms.ui.screens.detail.DetailScreen
 import com.psm.myfilms.ui.screens.detail.DetailViewModel
 import com.psm.myfilms.ui.screens.home.HomeScreen

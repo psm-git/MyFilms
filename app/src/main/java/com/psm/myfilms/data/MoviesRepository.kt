@@ -1,6 +1,6 @@
 package com.psm.myfilms.data
 
-import com.psm.myfilms.data.data_sources.MoviesRemoteDataSource
+import com.psm.myfilms.data.data_sources.remote.MoviesRemoteDataSource
 
 class MoviesRepository(
     private val regionRepository: RegionRepository,
