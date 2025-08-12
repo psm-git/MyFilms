@@ -1,30 +1,15 @@
 package com.psm.myfilms.data
 
+import com.psm.myfilms.data.data_sources.MoviesRemoteDataSource
+
 class MoviesRepository(
-    private val regionRepository: RegionRepository
+    private val regionRepository: RegionRepository,
+    private val remoteDataSource: MoviesRemoteDataSource
 ) {
-    suspend fun fetchPopularMovies(): List<Movie> =
-        MoviesClient.instance
-            .fetchPopularMovies(regionRepository.findLastRegion())
-            .results
-            .map { it.toDomainModel() }
 
-    suspend fun fetchMovieById(id: Int): Movie =
-        MoviesClient.instance
-            .fetchMovieById(id)
-            .toDomainModel()
+    suspend fun fetchPopularMovies() =
+        remoteDataSource.fetchPopularMovies(regionRepository.findLastRegion())
 
-    private fun RemoteMovie.toDomainModel() = Movie(
-        id,
-        title,
-        overview,
-        releaseDate,
-        "https://image.tmdb.org/t/p/w185/$posterPath",
-        backdropPath?.let { "https://image.tmdb.org/t/p/w780/$it" },
-        originalLanguage,
-        originalTitle,
-        popularity,
-        voteAverage,
-        false
-    )
+    suspend fun fetchMovieById(id: Int): Movie = remoteDataSource.fetchMovieById(id)
+
 }
