@@ -40,7 +40,10 @@ class DetailViewModel(
 
     fun onAction(action: DetailAction) {
         when (action) {
-            is DetailAction.FavoriteClicked -> _state.update { it.copy(message = "Favorite clicked") }
+            is DetailAction.FavoriteClicked -> state.value.movie?.let {
+                viewModelScope.launch { repository.toggleFavorite(it) }
+            }
+
             is DetailAction.MessageShown -> _state.update { it.copy(message = null) }
         }
     }

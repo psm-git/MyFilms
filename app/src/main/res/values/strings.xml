@@ -2,4 +2,5 @@
     <string name="app_name">MyFilms</string>
     <string name="back">Atrás</string>
     <string name="mark_as_favourite">Marcar como favorito</string>
+    <string name="favourite">Favorito</string>
 </resources>

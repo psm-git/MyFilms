@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -62,9 +63,10 @@ fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
             },
             snackbarHost = { SnackbarHost(detailState.snackbarHostState) },
             floatingActionButton = {
+                val isFavorite = state.movie?.isFavorite ?: false
                 FloatingActionButton(onClick = { viewModel.onAction(DetailAction.FavoriteClicked) }) {
                     Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = stringResource(R.string.mark_as_favourite)
                     )
                 }
