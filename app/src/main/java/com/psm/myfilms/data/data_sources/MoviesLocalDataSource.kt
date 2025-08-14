@@ -5,12 +5,14 @@ import com.psm.myfilms.data.data_sources.database.MoviesDao
 
 class MoviesLocalDataSource(private val moviesDao: MoviesDao) {
 
-    suspend fun fetchPopularMovies() = moviesDao.fetchAll()
+    val movies = moviesDao.fetchAll()
 
-    suspend fun findById(id: Int) = moviesDao.findById(id)
+    fun findById(id: Int) = moviesDao.findById(id)
 
     suspend fun isEmpty() = moviesDao.count() == 0
 
     suspend fun save(movies: List<Movie>) = moviesDao.save(movies)
+
+    suspend fun save(movie: Movie) = moviesDao.save(movie)
 
 }

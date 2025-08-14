@@ -2,6 +2,9 @@ package com.psm.myfilms.data
 
 import com.psm.myfilms.data.data_sources.MoviesLocalDataSource
 import com.psm.myfilms.data.data_sources.remote.MoviesRemoteDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onEach
 
 class MoviesRepository(
     private val regionRepository: RegionRepository,
@@ -9,21 +12,22 @@ class MoviesRepository(
     private val localDataSource: MoviesLocalDataSource
 ) {
 
-    suspend fun fetchPopularMovies(): List<Movie> {
-        if (localDataSource.isEmpty()) {
+    val movies: Flow<List<Movie>> = localDataSource.movies.onEach { localMovies ->
+        if (localMovies.isEmpty()) {
             val region = regionRepository.findLastRegion()
-            val movies = remoteDataSource.fetchPopularMovies(region)
-            localDataSource.save(movies)
+            val remoteMovies = remoteDataSource.fetchPopularMovies(region)
+            localDataSource.save(remoteMovies)
         }
-        return localDataSource.fetchPopularMovies()
     }
 
-    suspend fun fetchMovieById(id: Int): Movie {
-        if (localDataSource.findById(id) == null) {
+    fun fetchMovieById(id: Int): Flow<Movie> = localDataSource.findById(id).onEach {
+        if (it == null) {
             val movie = remoteDataSource.fetchMovieById(id)
-            localDataSource.save(listOf(movie))
+            localDataSource.save(movie)
         }
-        return checkNotNull(localDataSource.findById(id))
-    }
+    }.filterNotNull()
+
+    suspend fun toggleFavorite(movie: Movie) =
+        localDataSource.save(movie.copy(isFavorite = !movie.isFavorite))
 
 }
