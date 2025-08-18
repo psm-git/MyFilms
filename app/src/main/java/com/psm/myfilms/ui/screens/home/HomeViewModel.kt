@@ -4,33 +4,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psm.myfilms.data.Movie
 import com.psm.myfilms.data.MoviesRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 class HomeViewModel(
     private val repository: MoviesRepository
 ) : ViewModel() {
+
+    private val uiReady = MutableStateFlow(false)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val state: StateFlow<UiState> = uiReady
+        .filter { it }
+        .flatMapLatest { repository.movies }
+        .map { UiState(movies = it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UiState(loading = true)
+        )
 
     data class UiState(
         val loading: Boolean = false,
         val movies: List<Movie> = emptyList()
     )
 
-    private val _state = MutableStateFlow(UiState())
-
-    /* Mejor con getter, ya que en algunos casos si no puede dar errores. Además el bytecode es más
-       sencillo. */
-    val state get() = _state.asStateFlow()
-
-
     fun onUiReady() {
-        viewModelScope.launch {
-            _state.value = UiState(loading = true)
-            repository.movies.collect {
-                _state.value = UiState(loading = false, movies = it)
-            }
-        }
+        uiReady.value = true
     }
 
 }

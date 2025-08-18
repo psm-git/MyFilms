@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psm.myfilms.data.Movie
 import com.psm.myfilms.data.MoviesRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 sealed interface DetailAction {
@@ -17,7 +17,7 @@ sealed interface DetailAction {
 
 class DetailViewModel(
     private val repository: MoviesRepository,
-    private val movieId: Int
+    movieId: Int
 ) : ViewModel() {
 
     data class UiState(
@@ -26,17 +26,13 @@ class DetailViewModel(
         val message: String? = null
     )
 
-    private val _state = MutableStateFlow(UiState())
-    val state: StateFlow<UiState> get() = _state.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            _state.value = UiState(loading = true)
-            repository.fetchMovieById(movieId).collect {
-                _state.value = UiState(loading = false, movie = it)
-            }
-        }
-    }
+    val state: StateFlow<UiState> = repository.fetchMovieById(movieId)
+        .map { UiState(movie = it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UiState(loading = true)
+        )
 
     fun onAction(action: DetailAction) {
         when (action) {
@@ -44,7 +40,9 @@ class DetailViewModel(
                 viewModelScope.launch { repository.toggleFavorite(it) }
             }
 
-            is DetailAction.MessageShown -> _state.update { it.copy(message = null) }
+            is DetailAction.MessageShown -> {
+//                state.update { it.copy(message = null) } // Antes había un MutableStateFlow.
+            }
         }
     }
 
