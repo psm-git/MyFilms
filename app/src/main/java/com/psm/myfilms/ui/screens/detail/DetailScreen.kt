@@ -2,6 +2,7 @@ package com.psm.myfilms.ui.screens.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -38,32 +38,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
-import com.psm.myfilms.ui.common.Loading
+import com.psm.myfilms.data.Movie
+import com.psm.myfilms.ui.common.MyScaffold
 import com.psm.myfilms.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
     val state by viewModel.state.collectAsState()
-    val detailState = rememberDetailState()
-
-    detailState.ShowMessageEffect(message = state.message) {
-        viewModel.onAction(DetailAction.MessageShown)
-    }
+    val detailState = rememberDetailState(state)
 
     Screen {
-        Scaffold(
+        MyScaffold(
+            state = state,
             modifier = Modifier.nestedScroll(detailState.scrollBehavior.nestedScrollConnection),
             topBar = {
                 DetailTopBar(
-                    state.movie?.title ?: "",
+                    detailState.topBarTitle,
                     detailState.scrollBehavior,
                     onBackClicked
                 )
             },
             snackbarHost = { SnackbarHost(detailState.snackbarHostState) },
             floatingActionButton = {
-                val isFavorite = state.movie?.isFavorite ?: false
+                val isFavorite = detailState.movie?.isFavorite ?: false
                 FloatingActionButton(onClick = { viewModel.onAction(DetailAction.FavoriteClicked) }) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
@@ -71,45 +69,8 @@ fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
                     )
                 }
             }
-        ) { padding ->
-            if (state.loading) {
-                Loading(padding = padding)
-            }
-            state.movie?.let {
-                Column(
-                    modifier = Modifier
-                        .padding(padding)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    AsyncImage(
-                        model = it.backdropPath,
-                        contentDescription = it.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(16 / 9f)
-                    )
-
-                    Text(
-                        text = it.overview,
-                        modifier = Modifier.padding(16.dp)
-                    )
-
-                    Text(
-                        text = buildAnnotatedString {
-                            Property("Original language", it.originalLanguage)
-                            Property("Original title", it.originalTitle)
-                            Property("Release date", it.releaseDate)
-                            Property("Popularity", it.popularity.toString())
-                            Property("Vote average", it.voteAverage.toString(), isEnd = true)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surfaceContainer)
-                            .padding(16.dp)
-                    )
-                }
-            }
+        ) { padding, movie ->
+            DetailMovie(padding, movie)
         }
     }
 }
@@ -136,6 +97,43 @@ private fun DetailTopBar(
 }
 
 @Composable
+private fun DetailMovie(padding: PaddingValues, movie: Movie) {
+    Column(
+        modifier = Modifier
+            .padding(padding)
+            .verticalScroll(rememberScrollState())
+    ) {
+        AsyncImage(
+            model = movie.backdropPath,
+            contentDescription = movie.title,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16 / 9f)
+        )
+
+        Text(
+            text = movie.overview,
+            modifier = Modifier.padding(16.dp)
+        )
+
+        Text(
+            text = buildAnnotatedString {
+                Property("Original language", movie.originalLanguage)
+                Property("Original title", movie.originalTitle)
+                Property("Release date", movie.releaseDate)
+                Property("Popularity", movie.popularity.toString())
+                Property("Vote average", movie.voteAverage.toString(), isEnd = true)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(16.dp)
+        )
+    }
+}
+
+@Composable
 private fun AnnotatedString.Builder.Property(name: String, value: String, isEnd: Boolean = false) {
     withStyle(ParagraphStyle(lineHeight = 15.sp)) {
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -147,4 +145,3 @@ private fun AnnotatedString.Builder.Property(name: String, value: String, isEnd:
         }
     }
 }
-

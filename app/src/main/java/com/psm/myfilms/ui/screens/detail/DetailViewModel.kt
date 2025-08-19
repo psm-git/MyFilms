@@ -2,12 +2,12 @@ package com.psm.myfilms.ui.screens.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.psm.myfilms.Result
 import com.psm.myfilms.data.Movie
 import com.psm.myfilms.data.MoviesRepository
-import kotlinx.coroutines.flow.SharingStarted
+import com.psm.myfilms.ifSuccess
+import com.psm.myfilms.stateAsResultIn
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 sealed interface DetailAction {
@@ -20,24 +20,15 @@ class DetailViewModel(
     movieId: Int
 ) : ViewModel() {
 
-    data class UiState(
-        val loading: Boolean = false,
-        val movie: Movie? = null,
-        val message: String? = null
-    )
-
-    val state: StateFlow<UiState> = repository.fetchMovieById(movieId)
-        .map { UiState(movie = it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = UiState(loading = true)
-        )
+    val state: StateFlow<Result<Movie>> = repository.fetchMovieById(movieId)
+        .stateAsResultIn(viewModelScope)
 
     fun onAction(action: DetailAction) {
         when (action) {
-            is DetailAction.FavoriteClicked -> state.value.movie?.let {
-                viewModelScope.launch { repository.toggleFavorite(it) }
+            is DetailAction.FavoriteClicked -> {
+                state.value.ifSuccess { movie ->
+                    viewModelScope.launch { repository.toggleFavorite(movie) }
+                }
             }
 
             is DetailAction.MessageShown -> {

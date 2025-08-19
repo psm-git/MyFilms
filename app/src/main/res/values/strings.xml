@@ -3,4 +3,5 @@
     <string name="back">Atrás</string>
     <string name="mark_as_favourite">Marcar como favorito</string>
     <string name="favourite">Favorito</string>
+    <string name="error">Error</string>
 </resources>

@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -32,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
 import com.psm.myfilms.data.Movie
-import com.psm.myfilms.ui.common.Loading
+import com.psm.myfilms.ui.common.MyScaffold
 import com.psm.myfilms.ui.common.PermissionRequestEffect
 import com.psm.myfilms.ui.screens.Screen
 
@@ -50,7 +49,8 @@ fun HomeScreen(
     }
 
     Screen {
-        Scaffold(
+        MyScaffold(
+            state = state,
             modifier = Modifier.nestedScroll(homeState.scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
@@ -58,11 +58,8 @@ fun HomeScreen(
                     scrollBehavior = homeState.scrollBehavior
                 )
             },
-        ) { innerPadding ->
-            if (state.loading) {
-                Loading(padding = innerPadding)
-            }
-            MyMoviesList(innerPadding, state.movies, onMovieClicked)
+        ) { innerPadding, movies ->
+            MyMoviesList(innerPadding, movies, onMovieClicked)
         }
     }
 }
