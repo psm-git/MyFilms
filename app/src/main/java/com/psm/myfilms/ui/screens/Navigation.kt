@@ -18,6 +18,9 @@ import com.psm.myfilms.ui.screens.detail.DetailScreen
 import com.psm.myfilms.ui.screens.detail.DetailViewModel
 import com.psm.myfilms.ui.screens.home.HomeScreen
 import com.psm.myfilms.ui.screens.home.HomeViewModel
+import com.psm.myfilms.usecases.FetchMoviesUseCase
+import com.psm.myfilms.usecases.FindMovieByIdUseCase
+import com.psm.myfilms.usecases.ToggleFavoriteUseCase
 import kotlinx.serialization.Serializable
 
 object NavScreen {
@@ -44,14 +47,24 @@ fun Navigation() {
     ) {
         composable<NavScreen.Home> {
             HomeScreen(
-                viewModel = viewModel { HomeViewModel(moviesRepository) },
+                viewModel = viewModel {
+                    HomeViewModel(
+                        FetchMoviesUseCase(moviesRepository)
+                    )
+                },
                 onMovieClicked = { navController.navigate(NavScreen.Detail(it.id)) }
             )
         }
         composable<NavScreen.Detail> { backStackEntry ->
             val movieId = backStackEntry.toRoute<NavScreen.Detail>().movieId
             DetailScreen(
-                viewModel = viewModel { DetailViewModel(moviesRepository, movieId) },
+                viewModel = viewModel {
+                    DetailViewModel(
+                        FindMovieByIdUseCase(moviesRepository),
+                        ToggleFavoriteUseCase(moviesRepository),
+                        movieId
+                    )
+                },
                 onBackClicked = { navController.popBackStack() }
             )
         }

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psm.myfilms.Result
 import com.psm.myfilms.data.Movie
-import com.psm.myfilms.data.MoviesRepository
 import com.psm.myfilms.stateAsResultIn
+import com.psm.myfilms.usecases.FetchMoviesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 
 class HomeViewModel(
-    private val repository: MoviesRepository
+    private val fetchMoviesUseCase: FetchMoviesUseCase
 ) : ViewModel() {
 
     private val uiReady = MutableStateFlow(false)
@@ -21,7 +21,7 @@ class HomeViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<Result<List<Movie>>> = uiReady
         .filter { it }
-        .flatMapLatest { repository.movies }
+        .flatMapLatest { fetchMoviesUseCase() }
         .stateAsResultIn(viewModelScope)
 
     fun onUiReady() {
