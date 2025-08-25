@@ -3,7 +3,7 @@ package com.psm.myfilms.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.psm.myfilms.Result
-import com.psm.myfilms.data.Movie
+import com.psm.myfilms.domain.Movie
 import com.psm.myfilms.stateAsResultIn
 import com.psm.myfilms.usecases.FetchMoviesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -7,7 +7,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.psm.myfilms.Result
-import com.psm.myfilms.data.Movie
+import com.psm.myfilms.domain.Movie
 
 @OptIn(ExperimentalMaterial3Api::class)
 class DetailState(

@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
-import com.psm.myfilms.data.Movie
+import com.psm.myfilms.domain.Movie
 import com.psm.myfilms.ui.common.MyScaffold
 import com.psm.myfilms.ui.screens.Screen
 

@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
-import com.psm.myfilms.data.Movie
+import com.psm.myfilms.domain.Movie
 import com.psm.myfilms.ui.common.MyScaffold
 import com.psm.myfilms.ui.common.PermissionRequestEffect
 import com.psm.myfilms.ui.screens.Screen

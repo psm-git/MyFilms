@@ -1,10 +1,10 @@
-package com.psm.myfilms.data
+package com.psm.myfilms.data.data_sources.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Movie(
+data class DbMovie(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val title: String,

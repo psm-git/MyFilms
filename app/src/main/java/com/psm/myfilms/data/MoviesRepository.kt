@@ -2,6 +2,7 @@ package com.psm.myfilms.data
 
 import com.psm.myfilms.data.data_sources.MoviesLocalDataSource
 import com.psm.myfilms.data.data_sources.remote.MoviesRemoteDataSource
+import com.psm.myfilms.domain.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach

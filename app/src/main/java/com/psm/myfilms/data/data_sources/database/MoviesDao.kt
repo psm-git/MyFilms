@@ -5,28 +5,27 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.psm.myfilms.data.Movie
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MoviesDao {
 
-    @Query("SELECT * FROM Movie")
-    fun fetchAll(): Flow<List<Movie>>
+    @Query("SELECT * FROM DbMovie")
+    fun fetchAll(): Flow<List<DbMovie>>
 
-    @Query("SELECT * FROM Movie WHERE id = :id")
-    fun findById(id: Int): Flow<Movie?>
+    @Query("SELECT * FROM DbMovie WHERE id = :id")
+    fun findById(id: Int): Flow<DbMovie?>
 
-    @Query("SELECT COUNT(*) FROM Movie")
+    @Query("SELECT COUNT(*) FROM DbMovie")
     suspend fun count(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(movies: List<Movie>)
+    suspend fun save(movies: List<DbMovie>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(movie: Movie)
+    suspend fun save(movie: DbMovie)
 
     @Delete
-    suspend fun delete(movie: Movie)
+    suspend fun delete(movie: DbMovie)
 
 }
