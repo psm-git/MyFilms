@@ -1,4 +1,4 @@
-package com.psm.myfilms.data.data_sources.database
+package com.psm.myfilms.framework.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

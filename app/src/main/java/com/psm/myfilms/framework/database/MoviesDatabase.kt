@@ -1,4 +1,4 @@
-package com.psm.myfilms.data.data_sources.database
+package com.psm.myfilms.framework.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

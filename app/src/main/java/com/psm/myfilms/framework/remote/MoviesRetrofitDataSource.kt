@@ -1,17 +1,20 @@
-package com.psm.myfilms.data.data_sources.remote
+package com.psm.myfilms.framework.remote
 
+import com.psm.myfilms.data.data_sources.MoviesRemoteDataSource
 import com.psm.myfilms.domain.Movie
 
-class MoviesRemoteDataSource() {
+class MoviesRetrofitDataSource(
+    private val moviesService: MoviesService
+) : MoviesRemoteDataSource {
 
-    suspend fun fetchPopularMovies(region: String): List<Movie> =
-        MoviesClient.instance
+    override suspend fun fetchPopularMovies(region: String): List<Movie> =
+        moviesService
             .fetchPopularMovies(region)
             .results
             .map { it.toDomainModel() }
 
-    suspend fun fetchMovieById(id: Int): Movie =
-        MoviesClient.instance
+    override suspend fun fetchMovieById(id: Int): Movie =
+        moviesService
             .fetchMovieById(id)
             .toDomainModel()
 

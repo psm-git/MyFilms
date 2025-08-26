@@ -1,4 +1,4 @@
-package com.psm.myfilms.data.data_sources.database
+package com.psm.myfilms.framework.database
 
 import androidx.room.Dao
 import androidx.room.Delete

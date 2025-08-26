@@ -2,7 +2,7 @@ package com.psm.myfilms
 
 import android.app.Application
 import androidx.room.Room
-import com.psm.myfilms.data.data_sources.database.MoviesDatabase
+import com.psm.myfilms.framework.database.MoviesDatabase
 
 class App : Application() {
 

@@ -1,4 +1,4 @@
-package com.psm.myfilms.data.data_sources.remote
+package com.psm.myfilms.framework.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Path
