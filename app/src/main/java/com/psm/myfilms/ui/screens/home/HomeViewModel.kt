@@ -2,9 +2,9 @@ package com.psm.myfilms.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.psm.myfilms.Result
 import com.psm.myfilms.domain.Movie
-import com.psm.myfilms.stateAsResultIn
+import com.psm.myfilms.ui.Result
+import com.psm.myfilms.ui.stateAsResultIn
 import com.psm.myfilms.usecases.FetchMoviesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

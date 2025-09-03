@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.psm.myfilms.R
-import com.psm.myfilms.Result
+import com.psm.myfilms.ui.Result
 
 @Composable
 fun <T> MyScaffold(

@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MyFilms"
 include(":app")
+include(":domain")
+include(":data")
+include(":usecases")

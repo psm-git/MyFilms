@@ -1,4 +1,4 @@
-package com.psm.myfilms
+package com.psm.myfilms.ui
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
