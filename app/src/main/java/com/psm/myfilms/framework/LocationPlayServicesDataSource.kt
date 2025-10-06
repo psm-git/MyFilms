@@ -5,11 +5,13 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.psm.myfilms.data.data_sources.LocationDataSource
 import com.psm.myfilms.domain.Location
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import android.location.Location as PlayServicesLocation
 
-class LocationPlayServicesDataSource(private val fusedLocationClient: FusedLocationProviderClient) :
-    LocationDataSource {
+class LocationPlayServicesDataSource @Inject constructor(
+    private val fusedLocationClient: FusedLocationProviderClient
+) : LocationDataSource {
 
     override suspend fun getLastLocation() = fusedLocationClient.lastLocation()
 

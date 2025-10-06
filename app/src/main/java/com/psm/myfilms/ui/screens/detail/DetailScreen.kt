@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
 import com.psm.myfilms.domain.Movie
@@ -44,7 +45,7 @@ import com.psm.myfilms.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(viewModel: DetailViewModel, onBackClicked: () -> Unit) {
+fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBackClicked: () -> Unit) {
     val state by viewModel.state.collectAsState()
     val detailState = rememberDetailState(state)
 

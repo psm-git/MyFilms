@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.psm.myfilms.R
 import com.psm.myfilms.domain.Movie
@@ -38,7 +39,7 @@ import com.psm.myfilms.ui.screens.Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
     onMovieClicked: (Movie) -> Unit
 ) {
     val state by viewModel.state.collectAsState()

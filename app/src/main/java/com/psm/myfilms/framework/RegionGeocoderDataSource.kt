@@ -6,8 +6,9 @@ import com.psm.myfilms.data.data_sources.LocationDataSource
 import com.psm.myfilms.data.data_sources.RegionDataSource
 import com.psm.myfilms.domain.Location
 import com.psm.myfilms.ui.common.getFromLocationCompat
+import javax.inject.Inject
 
-class RegionGeocoderDataSource(
+class RegionGeocoderDataSource @Inject constructor(
     private val geocoder: Geocoder,
     private val locationDataSource: LocationDataSource
 ) : RegionDataSource {

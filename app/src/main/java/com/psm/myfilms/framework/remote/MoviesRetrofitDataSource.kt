@@ -2,8 +2,9 @@ package com.psm.myfilms.framework.remote
 
 import com.psm.myfilms.data.data_sources.MoviesRemoteDataSource
 import com.psm.myfilms.domain.Movie
+import javax.inject.Inject
 
-class MoviesRetrofitDataSource(
+class MoviesRetrofitDataSource @Inject constructor(
     private val moviesService: MoviesService
 ) : MoviesRemoteDataSource {
 

@@ -2,8 +2,9 @@ package com.psm.myfilms.usecases
 
 import com.psm.myfilms.data.MoviesRepository
 import com.psm.myfilms.domain.Movie
+import javax.inject.Inject
 
-class ToggleFavoriteUseCase(
+class ToggleFavoriteUseCase @Inject constructor(
     private val moviesRepository: MoviesRepository
 ) {
 
