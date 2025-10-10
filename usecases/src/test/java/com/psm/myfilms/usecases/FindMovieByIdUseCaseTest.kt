@@ -1,0 +1,23 @@
+package com.psm.myfilms.usecases
+
+import com.psm.test_fixtures.sampleMovie
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+
+class FindMovieByIdUseCaseTest {
+    @Test
+    fun `Invoke calls repository`() {
+        val movieFlow = flowOf(sampleMovie(1))
+        val useCase = FindMovieByIdUseCase(
+            mock {
+                on { fetchMovieById(1) } doReturn movieFlow
+            })
+
+        val result = useCase(1)
+
+        assertEquals(movieFlow, result)
+    }
+}

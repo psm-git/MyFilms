@@ -14,13 +14,14 @@ class MoviesRepository @Inject constructor(
     private val localDataSource: MoviesLocalDataSource
 ) {
 
-    val movies: Flow<List<Movie>> = localDataSource.movies.onEach { localMovies ->
-        if (localMovies.isEmpty()) {
-            val region = regionRepository.findLastRegion()
-            val remoteMovies = remoteDataSource.fetchPopularMovies(region)
-            localDataSource.save(remoteMovies)
+    val movies: Flow<List<Movie>>
+        get() = localDataSource.movies.onEach { localMovies ->
+            if (localMovies.isEmpty()) {
+                val region = regionRepository.findLastRegion()
+                val remoteMovies = remoteDataSource.fetchPopularMovies(region)
+                localDataSource.save(remoteMovies)
+            }
         }
-    }
 
     fun fetchMovieById(id: Int): Flow<Movie> = localDataSource.findById(id).onEach {
         if (it == null) {
